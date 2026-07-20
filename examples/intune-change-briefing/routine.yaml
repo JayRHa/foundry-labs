@@ -1,0 +1,12 @@
+triggers:
+  default:
+    type: schedule
+    cron_expression: "0 7 * * 1-5"
+    time_zone: Europe/Berlin
+
+action:
+  type: invoke_agent_responses_api
+  agent_name: intune-change-briefing
+  input: >
+    Review the queued Intune changes for the next 48 hours.
+    Return the decision, risks, missing prerequisites and rollback gaps.

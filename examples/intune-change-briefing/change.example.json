@@ -1,0 +1,15 @@
+{
+  "title": "Enable Windows 11 quality update acceleration",
+  "scope": "Pilot ring with 50 Windows 11 devices",
+  "owner": "Endpoint Engineering",
+  "planned_start": "2026-07-27T08:00:00Z",
+  "success_criteria": [
+    "At least 95 percent of pilot devices install successfully",
+    "No increase in helpdesk incidents after 48 hours"
+  ],
+  "rollback": "Pause the deployment and restore the previous assignment",
+  "known_risks": [
+    "Devices with low free disk space",
+    "Users working through metered connections"
+  ]
+}
