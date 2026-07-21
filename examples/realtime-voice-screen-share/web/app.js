@@ -441,7 +441,9 @@ async function startScreenShare() {
     elements.preview.hidden = false;
     elements.screenEmpty.hidden = true;
     elements.share.dataset.active = "true";
-    elements.share.querySelector("span:last-child").textContent = "Stop sharing";
+    elements.share.querySelector(".control-label-full").textContent = "Stop sharing";
+    elements.share.querySelector(".control-label-short").textContent = "Stop";
+    elements.share.setAttribute("aria-label", "Stop screen sharing");
     elements.sendFrame.disabled = false;
     elements.share.disabled = false;
     track.addEventListener("ended", stopScreenShare, { once: true });
@@ -479,7 +481,9 @@ function stopScreenShare() {
   elements.preview.hidden = true;
   elements.screenEmpty.hidden = false;
   elements.share.dataset.active = "false";
-  elements.share.querySelector("span:last-child").textContent = "Share screen";
+  elements.share.querySelector(".control-label-full").textContent = "Share screen";
+  elements.share.querySelector(".control-label-short").textContent = "Share";
+  elements.share.setAttribute("aria-label", "Share screen");
   elements.sendFrame.disabled = true;
   elements.announcement.textContent = "Screen sharing stopped.";
 }
@@ -488,7 +492,10 @@ function toggleMute() {
   state.muted = !state.muted;
   state.micStream?.getAudioTracks().forEach((track) => { track.enabled = !state.muted; });
   elements.mute.dataset.active = String(state.muted);
-  elements.mute.querySelector("span:last-child").textContent = state.muted ? "Unmute" : "Mute";
+  const muteText = state.muted ? "Unmute" : "Mute";
+  elements.mute.querySelector(".control-label-full").textContent = muteText;
+  elements.mute.querySelector(".control-label-short").textContent = muteText;
+  elements.mute.setAttribute("aria-label", state.muted ? "Unmute microphone" : "Mute microphone");
   elements.announcement.textContent = state.muted ? "Microphone muted." : "Microphone active.";
 }
 
@@ -556,7 +563,9 @@ function openPreviewMode() {
   elements.mute.disabled = false;
   elements.share.disabled = false;
   elements.share.dataset.active = "true";
-  elements.share.querySelector("span:last-child").textContent = "Stop sharing";
+  elements.share.querySelector(".control-label-full").textContent = "Stop sharing";
+  elements.share.querySelector(".control-label-short").textContent = "Stop";
+  elements.share.setAttribute("aria-label", "Stop screen sharing");
   elements.sendFrame.disabled = false;
   elements.screenEmpty.innerHTML = `
     <img class="e2e-image" src="/docs/azure-foundry-models.png" alt="Microsoft Foundry model catalog shared with Screen Guide">

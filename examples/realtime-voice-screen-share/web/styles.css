@@ -887,6 +887,10 @@ footer {
   transform: rotate(14deg);
 }
 
+.control-label-short {
+  display: none;
+}
+
 #remote-audio {
   display: none;
 }
@@ -929,27 +933,91 @@ footer {
   }
 
   .call-workspace {
-    overflow-y: auto;
-    grid-template-columns: 1fr;
-  }
-
-  .screen-stage,
-  .transcript {
-    min-height: 15rem;
-  }
-
-  .screen-stage {
-    overflow: visible;
-  }
-
-  .screen-viewport {
-    min-height: clamp(15rem, 56vw, 28rem);
-    flex: none;
-    aspect-ratio: 16 / 9;
+    grid-template-columns: minmax(0, 1.15fr) minmax(17rem, 0.85fr);
   }
 
   .call-controls {
     flex-wrap: wrap;
+  }
+}
+
+@media (max-width: 720px) {
+  .call-dialog {
+    width: calc(100% - 1rem);
+    max-height: calc(100dvh - 1rem);
+  }
+
+  .call-shell {
+    max-height: calc(100dvh - 1rem);
+  }
+
+  .call-header {
+    min-height: 4.1rem;
+    padding: 0.65rem 0.75rem 0.65rem 1rem;
+  }
+
+  .call-status-row {
+    padding: 0.7rem 1rem;
+  }
+
+  .agent-orb {
+    width: 2.55rem;
+    height: 2.55rem;
+  }
+
+  .call-workspace {
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    grid-template-columns: 1fr;
+  }
+
+  .screen-stage,
+  .transcript-panel {
+    padding: 0.85rem;
+  }
+
+  .screen-stage {
+    min-height: 0;
+    overflow: visible;
+  }
+
+  .panel-heading {
+    min-height: 2.7rem;
+    margin-bottom: 0.55rem;
+  }
+
+  .screen-viewport {
+    min-height: 0;
+    flex: none;
+    aspect-ratio: 16 / 9;
+  }
+
+  .screen-empty {
+    padding: 1rem;
+  }
+
+  .screen-empty p {
+    margin-top: 0.35rem;
+    font-size: 0.8rem;
+  }
+
+  .screen-symbol {
+    width: 3.25rem;
+    height: 2.15rem;
+    margin-bottom: 0.8rem;
+  }
+
+  .screen-symbol span {
+    width: 1.45rem;
+    margin-top: 2.3rem;
+  }
+
+  .transcript-panel {
+    min-height: 13rem;
+  }
+
+  .transcript {
+    min-height: 10rem;
   }
 }
 
@@ -970,13 +1038,16 @@ footer {
 
   .call-dialog {
     width: 100%;
-    max-height: 100dvh;
+    height: 100dvh;
+    max-height: none;
     margin: 0;
     border-radius: 0;
   }
 
   .call-shell {
-    max-height: 100dvh;
+    height: 100dvh;
+    max-height: none;
+    border: 0;
   }
 
   .preview-badge,
@@ -984,15 +1055,125 @@ footer {
     display: none;
   }
 
+  .call-header {
+    padding-top: max(0.65rem, env(safe-area-inset-top));
+  }
+
+  .call-controls {
+    display: grid;
+    min-height: 4.75rem;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 0.35rem;
+    padding: 0.5rem max(0.5rem, env(safe-area-inset-right)) max(0.5rem, env(safe-area-inset-bottom)) max(0.5rem, env(safe-area-inset-left));
+  }
+
   .control {
-    min-width: calc(50% - 0.5rem);
-    flex: 1 1 calc(50% - 0.5rem);
+    min-width: 0;
+    min-height: 3.5rem;
+    flex-direction: column;
+    gap: 0.25rem;
+    padding: 0.4rem 0.2rem;
+    font-size: 0.68rem;
+  }
+
+  .control-label-full {
+    display: none;
+  }
+
+  .control-label-short {
+    display: inline;
+    line-height: 1;
   }
 
   footer {
     align-items: flex-start;
     flex-direction: column;
     justify-content: center;
+  }
+}
+
+@media (max-width: 380px) {
+  .call-kicker,
+  .panel-label {
+    display: none;
+  }
+
+  .call-header h2 {
+    font-size: 1.1rem;
+  }
+
+  .screen-stage,
+  .transcript-panel {
+    padding-inline: 0.65rem;
+  }
+
+  .frame-count {
+    max-width: 6.5rem;
+    text-align: right;
+  }
+}
+
+@media (max-width: 720px) and (max-height: 600px) {
+  .call-header {
+    min-height: 3.6rem;
+    padding-block: 0.45rem;
+  }
+
+  .call-status-row {
+    padding-block: 0.45rem;
+  }
+
+  .agent-orb {
+    width: 2.25rem;
+    height: 2.25rem;
+  }
+
+  .screen-viewport {
+    height: clamp(10rem, 45dvh, 15rem);
+    aspect-ratio: auto;
+  }
+
+  .transcript-panel {
+    min-height: 11rem;
+  }
+}
+
+@media (max-width: 720px) and (max-height: 600px) and (orientation: landscape) {
+  .call-workspace {
+    overflow: hidden;
+    grid-template-columns: minmax(0, 1.1fr) minmax(15rem, 0.9fr);
+  }
+
+  .screen-stage,
+  .transcript-panel {
+    min-height: 0;
+    overflow: hidden;
+    padding: 0.6rem;
+  }
+
+  .panel-heading {
+    min-height: 2.15rem;
+    margin-bottom: 0.35rem;
+  }
+
+  .screen-viewport {
+    height: auto;
+    min-height: 0;
+    flex: 1;
+    aspect-ratio: auto;
+  }
+
+  .transcript {
+    min-height: 0;
+  }
+
+  .call-controls {
+    min-height: 4.15rem;
+    padding-block: 0.4rem;
+  }
+
+  .control {
+    min-height: 2.9rem;
   }
 }
 

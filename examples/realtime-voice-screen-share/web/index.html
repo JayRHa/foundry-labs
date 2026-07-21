@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     <meta name="color-scheme" content="light dark" />
     <meta name="description" content="Talk to a Microsoft Foundry Realtime agent about a screen you explicitly share." />
     <title>Realtime Screen Lab · Microsoft Foundry Examples</title>
@@ -172,21 +172,25 @@
         <p id="call-error" class="call-error" role="alert" hidden></p>
 
         <div class="call-controls" aria-label="Call controls">
-          <button id="mute-call" class="control" type="button" disabled>
+          <button id="mute-call" class="control" type="button" aria-label="Mute microphone" disabled>
             <span class="control-dot" aria-hidden="true"></span>
-            <span>Mute</span>
+            <span class="control-label-full">Mute</span>
+            <span class="control-label-short" aria-hidden="true">Mute</span>
           </button>
-          <button id="share-screen" class="control control-accent" type="button" disabled>
+          <button id="share-screen" class="control control-accent" type="button" aria-label="Share screen" disabled>
             <span class="control-screen" aria-hidden="true"></span>
-            <span>Share screen</span>
+            <span class="control-label-full">Share screen</span>
+            <span class="control-label-short" aria-hidden="true">Share</span>
           </button>
-          <button id="send-frame" class="control" type="button" disabled>
+          <button id="send-frame" class="control" type="button" aria-label="Send current frame" disabled>
             <span class="control-frame" aria-hidden="true"></span>
-            <span>Send current frame</span>
+            <span class="control-label-full">Send current frame</span>
+            <span class="control-label-short" aria-hidden="true">Frame</span>
           </button>
-          <button id="end-call" class="control control-danger" type="button">
+          <button id="end-call" class="control control-danger" type="button" aria-label="End call">
             <span class="control-phone" aria-hidden="true"></span>
-            <span>End call</span>
+            <span class="control-label-full">End call</span>
+            <span class="control-label-short" aria-hidden="true">End</span>
           </button>
         </div>
       </div>

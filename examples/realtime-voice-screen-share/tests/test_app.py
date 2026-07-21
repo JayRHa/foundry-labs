@@ -59,6 +59,18 @@ def test_browser_e2e_fixture_is_served():
     assert len(response.content) > 1_000
 
 
+def test_small_screen_layout_keeps_safe_areas_and_compact_controls():
+    client = TestClient(app_module.app)
+    page = client.get("/")
+    styles = client.get("/assets/styles.css")
+
+    assert "viewport-fit=cover" in page.text
+    assert 'aria-label="Mute microphone"' in page.text
+    assert "@media (max-width: 720px)" in styles.text
+    assert "grid-template-columns: repeat(4, minmax(0, 1fr))" in styles.text
+    assert "env(safe-area-inset-bottom)" in styles.text
+
+
 def test_token_endpoint_rejects_unapproved_origin():
     client = TestClient(app_module.app)
     response = client.post(
