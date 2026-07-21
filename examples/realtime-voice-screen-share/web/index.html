@@ -1,0 +1,195 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="color-scheme" content="light dark" />
+    <meta name="description" content="Talk to a Microsoft Foundry Realtime agent about a screen you explicitly share." />
+    <title>Realtime Screen Lab · Microsoft Foundry Examples</title>
+    <link rel="stylesheet" href="/assets/styles.css" />
+    <script type="module" src="/assets/app.js"></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <header class="site-header">
+      <a class="brand" href="https://jannikreinhard.com/" aria-label="Jannik Reinhard home">
+        <span class="brand-mark" aria-hidden="true">JR</span>
+        <span>
+          <strong>Jannik Reinhard</strong>
+          <small>AI · Cloud · Endpoint</small>
+        </span>
+      </a>
+      <a class="header-link" href="https://github.com/JayRHa/microsoft-foundry-examples">
+        View source on GitHub
+      </a>
+    </header>
+
+    <main id="main">
+      <section class="hero" aria-labelledby="page-title">
+        <div class="hero-copy">
+          <p class="eyebrow">Microsoft Foundry example · Realtime 2.x</p>
+          <h1 id="page-title">Talk through what is on your screen.</h1>
+          <p class="lede">
+            A small browser lab for low-latency voice and explicit screen sharing.
+            The agent receives sampled image frames only after you choose a tab,
+            window, or monitor.
+          </p>
+          <div class="hero-actions">
+            <button id="start-call" class="button button-primary" type="button">
+              Start voice session
+            </button>
+            <a class="button button-secondary" href="#how-it-works">How it works</a>
+          </div>
+          <p id="setup-state" class="setup-state" role="status" aria-live="polite">
+            Checking local configuration…
+          </p>
+        </div>
+
+        <aside class="permission-brief" aria-label="What the demo uses">
+          <p class="brief-label">Before you start</p>
+          <ol>
+            <li>
+              <span>01</span>
+              <div><strong>Microphone</strong><small>Used for the live WebRTC audio track.</small></div>
+            </li>
+            <li>
+              <span>02</span>
+              <div><strong>Your choice of screen</strong><small>The browser picker is always explicit.</small></div>
+            </li>
+            <li>
+              <span>03</span>
+              <div><strong>Changed frames only</strong><small>JPEG samples stay inside the live session.</small></div>
+            </li>
+          </ol>
+        </aside>
+      </section>
+
+      <section id="how-it-works" class="explainer" aria-labelledby="flow-title">
+        <div class="section-heading">
+          <p class="eyebrow">One narrow path</p>
+          <h2 id="flow-title">The browser owns the media. Azure owns the model.</h2>
+        </div>
+        <div class="flow" aria-label="Architecture flow">
+          <article>
+            <span>1</span>
+            <h3>Short-lived access</h3>
+            <p>The local service uses Entra ID and returns only an ephemeral client secret.</p>
+          </article>
+          <article>
+            <span>2</span>
+            <h3>WebRTC audio</h3>
+            <p>Your browser sends microphone audio directly to the Realtime endpoint.</p>
+          </article>
+          <article>
+            <span>3</span>
+            <h3>Visible screen frames</h3>
+            <p>Only changed, downscaled frames from the selected surface enter the conversation.</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="boundary" aria-labelledby="boundary-title">
+        <div>
+          <p class="eyebrow">Trust boundary</p>
+          <h2 id="boundary-title">The screen is never shared silently.</h2>
+        </div>
+        <p>
+          The preview stays visible during the call. A frame counter shows what
+          left the browser. Stop sharing from the app or the browser indicator at
+          any time. Do not share passwords, secrets, personal data, or production
+          consoles unless that data is approved for model processing.
+        </p>
+      </section>
+    </main>
+
+    <footer>
+      <span>Microsoft Foundry Examples</span>
+      <span>Built as a transparent learning lab, not a production service.</span>
+    </footer>
+
+    <dialog id="call-dialog" class="call-dialog" aria-labelledby="call-title">
+      <div class="call-shell">
+        <header class="call-header">
+          <div>
+            <p class="call-kicker">Realtime Screen Lab</p>
+            <h2 id="call-title">Screen Guide</h2>
+          </div>
+          <div class="call-meta">
+            <span class="preview-badge">Preview model</span>
+            <button id="close-dialog" class="icon-button" type="button" aria-label="End call">×</button>
+          </div>
+        </header>
+
+        <div class="call-status-row">
+          <div class="agent-state">
+            <div class="agent-orb" aria-hidden="true">
+              <span></span><span></span><span></span><span></span>
+            </div>
+            <div>
+              <strong id="connection-label">Connecting…</strong>
+              <small><span id="status-dot" class="status-dot"></span><span id="call-duration">00:00</span></small>
+            </div>
+          </div>
+          <p id="live-announcement" class="sr-only" aria-live="assertive"></p>
+          <p class="model-label"><span id="model-name">Realtime model</span> · <span id="voice-name">voice</span></p>
+        </div>
+
+        <div class="call-workspace">
+          <section class="screen-stage" aria-labelledby="screen-stage-title">
+            <div class="panel-heading">
+              <div>
+                <p class="panel-label">Shared context</p>
+                <h3 id="screen-stage-title">Your screen preview</h3>
+              </div>
+              <span id="frame-count" class="frame-count">0 frames sent</span>
+            </div>
+            <div id="screen-empty" class="screen-empty">
+              <div class="screen-symbol" aria-hidden="true"><span></span></div>
+              <strong>No screen is being shared</strong>
+              <p>Start with voice. Share a surface only when the agent needs visual context.</p>
+            </div>
+            <video id="screen-preview" class="screen-preview" autoplay muted playsinline hidden></video>
+            <canvas id="capture-canvas" hidden></canvas>
+            <canvas id="thumb-canvas" width="32" height="32" hidden></canvas>
+          </section>
+
+          <section class="transcript-panel" aria-labelledby="transcript-title">
+            <div class="panel-heading">
+              <div>
+                <p class="panel-label">Live captions</p>
+                <h3 id="transcript-title">Conversation</h3>
+              </div>
+              <button id="clear-transcript" class="text-button" type="button">Clear</button>
+            </div>
+            <div id="transcript" class="transcript" role="log" aria-live="polite" aria-relevant="additions text">
+              <p class="transcript-empty">The agent transcript will appear here after the call connects.</p>
+            </div>
+          </section>
+        </div>
+
+        <p id="call-error" class="call-error" role="alert" hidden></p>
+
+        <div class="call-controls" aria-label="Call controls">
+          <button id="mute-call" class="control" type="button" disabled>
+            <span class="control-dot" aria-hidden="true"></span>
+            <span>Mute</span>
+          </button>
+          <button id="share-screen" class="control control-accent" type="button" disabled>
+            <span class="control-screen" aria-hidden="true"></span>
+            <span>Share screen</span>
+          </button>
+          <button id="send-frame" class="control" type="button" disabled>
+            <span class="control-frame" aria-hidden="true"></span>
+            <span>Send current frame</span>
+          </button>
+          <button id="end-call" class="control control-danger" type="button">
+            <span class="control-phone" aria-hidden="true"></span>
+            <span>End call</span>
+          </button>
+        </div>
+      </div>
+    </dialog>
+
+    <audio id="remote-audio" autoplay></audio>
+  </body>
+</html>

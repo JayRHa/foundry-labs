@@ -11,6 +11,7 @@ human decision point before any administrative change.
 | Example | What it demonstrates | Status |
 |---|---|---|
 | [Intune Change Briefing](examples/intune-change-briefing/) | Review a proposed Microsoft Intune change with Claude in Microsoft Foundry | Runnable |
+| [Realtime Voice and Screen Share Lab](examples/realtime-voice-screen-share/) | Talk to a Realtime agent over WebRTC and add an explicitly shared screen as visual context | Runnable · preview model |
 
 ## Design principles
 
