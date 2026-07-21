@@ -143,12 +143,14 @@
               </div>
               <span id="frame-count" class="frame-count">0 frames sent</span>
             </div>
-            <div id="screen-empty" class="screen-empty">
-              <div class="screen-symbol" aria-hidden="true"><span></span></div>
-              <strong>No screen is being shared</strong>
-              <p>Start with voice. Share a surface only when the agent needs visual context.</p>
+            <div class="screen-viewport">
+              <div id="screen-empty" class="screen-empty">
+                <div class="screen-symbol" aria-hidden="true"><span></span></div>
+                <strong>No screen is being shared</strong>
+                <p>Start with voice. Share a surface only when the agent needs visual context.</p>
+              </div>
+              <video id="screen-preview" class="screen-preview" autoplay muted playsinline hidden></video>
             </div>
-            <video id="screen-preview" class="screen-preview" autoplay muted playsinline hidden></video>
             <canvas id="capture-canvas" hidden></canvas>
             <canvas id="thumb-canvas" width="32" height="32" hidden></canvas>
           </section>

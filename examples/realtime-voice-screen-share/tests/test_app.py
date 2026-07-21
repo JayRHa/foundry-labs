@@ -34,6 +34,8 @@ def test_session_config_keeps_sensitive_instructions_on_server():
     assert session["audio"]["output"]["voice"] == "marin"
     assert session["audio"]["input"]["turn_detection"]["interrupt_response"] is True
     assert session["reasoning"]["effort"] == "low"
+    assert "user's latest spoken question" in session["instructions"]
+    assert "speaks German, answer in German" in session["instructions"]
     assert "api_key" not in config
     assert "access_token" not in config
     assert "client_secret" not in config
@@ -50,7 +52,7 @@ def test_health_does_not_return_credentials():
 
 def test_browser_e2e_fixture_is_served():
     client = TestClient(app_module.app)
-    response = client.get("/docs/realtime-screen-lab-hero.png")
+    response = client.get("/docs/azure-foundry-models.png")
 
     assert response.status_code == 200
     assert response.headers["content-type"] == "image/png"

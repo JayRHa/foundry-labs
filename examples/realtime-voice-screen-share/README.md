@@ -13,13 +13,14 @@ understand the flow:
 - a Realtime data channel for events and captions;
 - explicit `getDisplayMedia()` consent;
 - changed, downscaled JPEG frames sent as `input_image` conversation items;
+- high-detail first/manual frames for readable UI text and low-detail automatic updates;
 - a visible preview, frame counter, mute control, and transcript.
 
 ![The browser lab landing page](docs/realtime-screen-lab-hero.png)
 
-The browser E2E path created a real WebRTC session, sent the screenshot above
-as one `input_image`, and received a grounded answer from the deployed model:
-"Talk through what is on your screen" and "your choice of screen."
+The browser E2E path created a real WebRTC session, sent a browser-captured
+Microsoft Foundry model catalog as one `input_image`, asked a German question,
+and received a grounded German answer from the deployed model.
 
 ![Live Realtime answer grounded in the browser screenshot](docs/realtime-e2e-result.png)
 
@@ -123,8 +124,8 @@ Open <http://127.0.0.1:8000>.
 
 For a reproducible local browser proof without granting microphone access, open
 `http://127.0.0.1:8000/?e2e=1`. On localhost only, this creates a silent WebRTC
-audio track and sends the browser-generated documentation screenshot as an
-`input_image`. The normal page never uses this path: it requests the real
+audio track and sends the browser-captured Microsoft Foundry model catalog as
+an `input_image`. The normal page never uses this path: it requests the real
 microphone and the native screen picker.
 
 1. Select **Start voice session** and allow microphone access.
@@ -147,8 +148,10 @@ Screen sharing is not a video track sent to the model. The implementation:
 4. Skips the frame when the mean pixel change is below the threshold.
 5. Downscales the longest edge to 1280 pixels.
 6. Encodes the result as a 68% quality JPEG.
-7. Sends an `input_image` conversation item over the Realtime data channel.
-8. Stops after 120 frames per call.
+7. Sends first and manually requested frames with `detail: high` for readable UI
+   text; automatic changed-frame updates use `detail: low`.
+8. Sends the `input_image` conversation item over the Realtime data channel.
+9. Stops after 120 frames per call.
 
 The model receives still images, not the full screen-capture video stream. That
 keeps the example understandable and gives the UI a precise frame counter.

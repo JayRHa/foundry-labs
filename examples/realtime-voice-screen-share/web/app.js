@@ -92,7 +92,7 @@ function blobToDataUrl(blob) {
 }
 
 async function sendLocalE2EProbe() {
-  const response = await fetch("/docs/realtime-screen-lab-hero.png", { cache: "no-store" });
+  const response = await fetch("/docs/azure-foundry-models.png", { cache: "no-store" });
   if (!response.ok) throw new Error("The browser test screenshot is missing.");
   const imageUrl = await blobToDataUrl(await response.blob());
   const sent = sendEvent({
@@ -101,8 +101,8 @@ async function sendLocalE2EProbe() {
       type: "message",
       role: "user",
       content: [
-        { type: "input_image", image_url: imageUrl, detail: "low" },
-        { type: "input_text", text: "This is a browser screenshot. State the large headline and one privacy boundary visible on the page. Be concise." },
+        { type: "input_image", image_url: imageUrl, detail: "high" },
+        { type: "input_text", text: "Das ist ein Browser-Screenshot aus Microsoft Foundry. Erkläre mir auf Deutsch, welche Modellübersicht ich sehe und nenne zwei Modelle, die für einen Realtime-Voice-Agent relevant sind. Antworte kurz." },
       ],
     },
   });
@@ -110,13 +110,13 @@ async function sendLocalE2EProbe() {
   state.framesSent = 1;
   elements.frameCount.textContent = "1 frame sent";
   elements.screenEmpty.innerHTML = `
-    <img class="e2e-image" src="/docs/realtime-screen-lab-hero.png" alt="Browser screenshot sent to the live Realtime session">
-    <p class="e2e-note">Browser E2E fixture · sent as <code>input_image</code></p>`;
-  addMessage("user", "What is the main headline and one privacy boundary shown in this screenshot?");
+    <img class="e2e-image" src="/docs/azure-foundry-models.png" alt="Microsoft Foundry model catalog sent to the live Realtime session">
+    <p class="e2e-note">Azure browser screenshot · sent as <code>input_image</code></p>`;
+  addMessage("user", "Welche Modellübersicht sehe ich hier und welche Modelle sind für einen Realtime-Voice-Agent relevant?");
   sendEvent({
     type: "response.create",
     response: {
-      instructions: "Answer from the supplied image only. State the large headline and one privacy boundary visible on the page in two short sentences.",
+      instructions: "Antworte ausschließlich auf Deutsch und stütze dich nur auf den bereitgestellten Screenshot. Beschreibe die sichtbare Microsoft-Foundry-Modellübersicht und nenne zwei sichtbare Modelle, die für einen Realtime-Voice-Agent relevant sind. Antworte in höchstens drei kurzen Sätzen.",
     },
   });
 }
@@ -339,7 +339,7 @@ async function startSession() {
       sendEvent({
         type: "response.create",
         response: {
-          instructions: "Greet the user in one short sentence and explain that you can discuss a screen after they explicitly share it.",
+          instructions: "Give one short welcome and explain that you can discuss a screen after the user explicitly shares it. For every later answer, use the language of the user's latest spoken question.",
         },
       });
     }
@@ -396,7 +396,7 @@ function captureFrame(force = false) {
     item: {
       type: "message",
       role: "user",
-      content: [{ type: "input_image", image_url: imageUrl, detail: "low" }],
+      content: [{ type: "input_image", image_url: imageUrl, detail: force ? "high" : "low" }],
     },
   });
   if (!sent) return false;
@@ -451,7 +451,7 @@ async function startScreenShare() {
       sendEvent({
         type: "response.create",
         response: {
-          instructions: "A screen frame was shared. Confirm that you can see it, describe only the high-level visible context, and ask what the user wants to inspect.",
+          instructions: "A screen frame was shared. In the language of the user's latest spoken turn, confirm that you can see it, describe only the high-level visible context, and ask what the user wants to inspect. If there is no spoken turn yet, keep the confirmation very short.",
         },
       });
     };
@@ -559,15 +559,10 @@ function openPreviewMode() {
   elements.share.querySelector("span:last-child").textContent = "Stop sharing";
   elements.sendFrame.disabled = false;
   elements.screenEmpty.innerHTML = `
-    <div class="demo-context" aria-label="Illustrative shared screen preview">
-      <span class="demo-bar"></span>
-      <strong>Microsoft Foundry · Models</strong>
-      <p>Realtime deployment selected · Sweden Central</p>
-      <div><span>Deployment</span><b>gpt-realtime-2.1</b></div>
-      <div><span>State</span><b class="demo-success">Succeeded</b></div>
-    </div>`;
-  addMessage("user", "Can you explain what I am looking at?");
-  addMessage("agent", "I can see the Foundry model deployment page. The realtime deployment is selected and its provisioning state is Succeeded.");
+    <img class="e2e-image" src="/docs/azure-foundry-models.png" alt="Microsoft Foundry model catalog shared with Screen Guide">
+    <p class="e2e-note">Microsoft Foundry · browser tab shared</p>`;
+  addMessage("user", "Welche Modelle sind hier für einen Realtime-Voice-Agent relevant?");
+  addMessage("agent", "Du siehst den Modellkatalog deines Microsoft-Foundry-Projekts. Für einen Voice-Agent sind hier besonders gpt-realtime-2.1 und gpt-realtime-2.1-mini relevant, da beide Audioverarbeitung unterstützen.");
 }
 
 elements.start.addEventListener("click", startSession);

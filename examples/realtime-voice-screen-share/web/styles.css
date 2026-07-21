@@ -582,6 +582,7 @@ footer {
   display: flex;
   min-height: 0;
   flex-direction: column;
+  overflow: hidden;
   padding: 1.15rem;
   background: #09172a;
 }
@@ -611,14 +612,29 @@ footer {
   font-weight: 700;
 }
 
-.screen-empty,
-.screen-preview {
+.screen-viewport {
+  position: relative;
+  display: grid;
   width: 100%;
-  min-height: 20rem;
+  min-width: 0;
+  min-height: 16rem;
   flex: 1;
+  place-items: center;
+  overflow: hidden;
   border: 1px solid rgb(255 255 255 / 0.11);
   border-radius: 0.45rem;
   background: #050d19;
+}
+
+.screen-empty,
+.screen-preview {
+  width: 100%;
+  height: 100%;
+  min-width: 0;
+  min-height: 0;
+  max-width: 100%;
+  max-height: 100%;
+  grid-area: 1 / 1;
 }
 
 .screen-empty {
@@ -725,7 +741,9 @@ footer {
 
 .screen-preview {
   display: block;
+  background: #020812;
   object-fit: contain;
+  object-position: center;
 }
 
 .screen-preview[hidden] {
@@ -915,10 +933,19 @@ footer {
     grid-template-columns: 1fr;
   }
 
-  .screen-empty,
-  .screen-preview,
+  .screen-stage,
   .transcript {
     min-height: 15rem;
+  }
+
+  .screen-stage {
+    overflow: visible;
+  }
+
+  .screen-viewport {
+    min-height: clamp(15rem, 56vw, 28rem);
+    flex: none;
+    aspect-ratio: 16 / 9;
   }
 
   .call-controls {

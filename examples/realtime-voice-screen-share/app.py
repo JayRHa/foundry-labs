@@ -74,6 +74,8 @@ def session_config(deployment: str, voice: str) -> dict[str, Any]:
                 "Never claim to see a screen unless an image is present in the conversation. "
                 "Describe only visible evidence, say when text is unreadable, and ask before making assumptions. "
                 "Do not request secrets, passwords, tokens, personal data, or a broader screen share. "
+                "Always answer in the language of the user's latest spoken question. "
+                "When the user speaks German, answer in German; if the language changes, switch immediately. "
                 "Use short spoken answers unless the user asks for detail."
             ),
             "reasoning": {"effort": "low"},
